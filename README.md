@@ -1,6 +1,6 @@
 # XPBoards Python Library
 
-[XPBoards]("https://web.xpboards.com.br/") and lib description here
+[XPBoards](https://web.xpboards.com.br/) and lib description here
 
 ## Getting Started
 
