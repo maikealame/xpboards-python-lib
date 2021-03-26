@@ -90,8 +90,6 @@ class XPBoardsServices:
             headers=headers
         )
 
-        print(response.text)
-
         return self.__handle_response(response.json())
 
     def create_dataset(self):
