@@ -1,5 +1,6 @@
 import requests
 from .plan import XPBoardsPlan
+from .dataset import XPBoardsDataSet
 
 class XPBoardsServices:
     __API_VERSION = 'v1'
@@ -81,7 +82,7 @@ class XPBoardsServices:
 
         return self.__handle_response(response.json())
 
-    def list_dataset_items(self, dataset_id):
+    def list_dataset_items(self, dataset_id, raw=False):
         url = f'{self.__BASE_URL}/dataset/{dataset_id}'
         headers = self.__get_auth_headers()
 
@@ -90,7 +91,14 @@ class XPBoardsServices:
             headers=headers
         )
 
-        return self.__handle_response(response.json())
+        data = self.__handle_response(response.json())
+
+        if raw:
+            return data
+        else:
+            return XPBoardsDataSet(data)
+
+
 
     def create_dataset(self):
         print('Not implemented')
