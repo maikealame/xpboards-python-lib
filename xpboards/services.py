@@ -122,14 +122,14 @@ class XPBoardsServices:
         else:
             raise Exception('The "data" param is not a XPBoardsDataSet instance')
 
-    def update_dataset(self, data):
+    def update_dataset(self, dataset_id, data):
         """
             Replaces specified dataset with sent data
         """
 
         if isinstance(data, XPBoardsDataSet):
             
-            url = f'{self.__BASE_URL}/dataset/{data.id}'
+            url = f'{self.__BASE_URL}/dataset/{dataset_id}'
             headers = self.__get_auth_headers()
 
             response = requests.put(
@@ -146,14 +146,14 @@ class XPBoardsServices:
             raise Exception('The "data" param is not a XPBoardsDataSet instance')
 
 
-    def clear_dataset(self, data):
+    def clear_dataset(self, dataset_id, data):
         """
             Clear all dataset items
         """
 
         if isinstance(data, XPBoardsDataSet):
             
-            url = f'{self.__BASE_URL}/dataset/{data.id}'
+            url = f'{self.__BASE_URL}/dataset/{dataset_id}'
             headers = self.__get_auth_headers()
 
             cleared_data = data.to_api()
