@@ -9,27 +9,31 @@ class XPBoardsServices:
 
 
     def __init__(self, email, password):
-       
         self.__token = self.__generate_token(email, password)
 
-    def __handle_request_errors(self, errors):
-        raise Exception(f'Got the following errors from api service: {repr(errors)}')
+    def __handle_request_errors(self, message):
+        raise Exception(message)
 
     def __handle_response(self, response):
         errors = response.get('errors', None)
         
         if errors:
-            self.__handle_request_errors(errors=errors)
+            self.__handle_request_errors(message=f'Got the following errors from api service: {repr(errors)}')
 
         data = response.get('data', None)
         
         if data == None:
-            raise Exception(f'No "data" found in the response body')
+            self.__handle_request_errors(message=f'No "data" found in the response body')
+
+        if not isinstance(data, list):
+            code = data.get('code', None)
+
+            if code == 'max_dataset_count':
+                self.__handle_request_errors(message=f'Got the following message from api service: {data["message"]}') 
 
         return data
 
     def __generate_token(self, email, password):
-
         url = f'{self.__BASE_URL}/login'
         headers = self.__DEFAULT_HEADERS
         body = {
@@ -98,13 +102,72 @@ class XPBoardsServices:
         else:
             return XPBoardsDataSet(data)
 
+    def create_dataset(self, data):
+
+        if isinstance(data, XPBoardsDataSet):
+            
+            url = f'{self.__BASE_URL}/dataset'
+            headers = self.__get_auth_headers()
+
+            response = requests.post(
+                url=url,
+                headers=headers,
+                json=data.to_api()
+            )
+
+            data = self.__handle_response(response.json())
+
+            return XPBoardsDataSet(data)
+
+        else:
+            raise Exception('The "data" param is not a XPBoardsDataSet instance')
+
+    def update_dataset(self, data):
+        """
+            Replaces specified dataset with sent data
+        """
+
+        if isinstance(data, XPBoardsDataSet):
+            
+            url = f'{self.__BASE_URL}/dataset/{data.id}'
+            headers = self.__get_auth_headers()
+
+            response = requests.put(
+                url=url,
+                headers=headers,
+                json=data.to_api()
+            )
+
+            data = self.__handle_response(response.json())
+
+            return XPBoardsDataSet(data)
+
+        else:
+            raise Exception('The "data" param is not a XPBoardsDataSet instance')
 
 
-    def create_dataset(self):
-        print('Not implemented')
+    def clear_dataset(self, data):
+        """
+            Clear all dataset items
+        """
 
-    def update_dataset(self):
-        print('Not implemented')
+        if isinstance(data, XPBoardsDataSet):
+            
+            url = f'{self.__BASE_URL}/dataset/{data.id}'
+            headers = self.__get_auth_headers()
 
-    def clear_dataset(self):
-        print('Not implemented')
+            cleared_data = data.to_api()
+            cleared_data['rows'] = []
+
+            response = requests.put(
+                url=url,
+                headers=headers,
+                json=cleared_data
+            )
+
+            data = self.__handle_response(response.json())
+
+            return XPBoardsDataSet(data)
+
+        else:
+            raise Exception('The "data" param is not a XPBoardsDataSet instance')
