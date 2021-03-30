@@ -74,6 +74,14 @@ class XPBoardsDataSet:
         return self.__columns
 
     @property
+    def items(self):
+        """
+            Returns the list of rows of the dataset (matrix shape)
+        """
+
+        return self.__rows
+
+    @property
     def name(self):
         """
             Returns the dataset name
@@ -278,31 +286,50 @@ class XPBoardsDataSet:
         """ 
             Append item to the end of the dataset, with given array of values
         """
-        print("Not implemented")
+        self.__rows.append(
+            self.Row(
+                values=values
+            )
+        )
 
-    def remove_item(self, id):
+    def remove_item(self, row_index):
         """ 
             Remove specified item from the dataset
         """
-        print("Not implemented")
+        self.__rows.pop(row_index)
 
-    def append_column(self, default_value="", default_value_type=""):
+    def append_column(self, name, value_type="", default_value=""):
         """ 
             Append a column to the end of all columns, setting a default value and type for all items in the dataset
         """
-        print("Not implemented")
+        self.__columns.append(
+            self.Column(name=name, value_type=name)
+        )
 
-    def edit_column(self, id, value, value_type):
+        for row in self.__rows:
+            row.values.append(default_value)
+
+
+    def edit_column(self, column_index, name=None, value_type=None):
         """ 
             Edit specified column with value and value_type
         """
-        print("Not implemented")
+        self.__columns[column_index].value_type = (
+            value_type if value_type else self.__columns[column_index].value_type
+        )
 
-    def remove_column(self, id):
+        self.__columns[column_index].name = (
+            name if name else self.__columns[column_index].name
+        )
+
+        
+    def remove_column(self, column_index):
         """ 
-            Remove specified item from the dataset
+            Remove specified column from the dataset
         """
-        print("Not implemented")
+        self.__columns.pop(column_index)
+        for row in self.__rows:
+            row.values.pop(column_index)
 
     class Column:
         def __init__(self, name, value_type):
