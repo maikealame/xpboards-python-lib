@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name='xpboards',
     packages=find_packages(include=['xpboards']),
-    version='0.1.0',
+    version='0.1.1',
     description='A python util for xpboards',
     author='Douglas Eloy',
     install_requires=['requests'],
