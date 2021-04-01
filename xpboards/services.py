@@ -100,12 +100,15 @@ class XPBoardsServices:
         if raw:
             return data
         else:
-            return XPBoardsDataSet(data)
+            return XPBoardsDataSet(data, convert_types=True)
 
-    def create_dataset(self, data):
+    def create_dataset(self, data, name=None):
 
         if isinstance(data, XPBoardsDataSet):
             
+            if name:
+                data.name = name
+
             url = f'{self.__BASE_URL}/dataset'
             headers = self.__get_auth_headers()
 
@@ -117,7 +120,7 @@ class XPBoardsServices:
 
             data = self.__handle_response(response.json())
 
-            return XPBoardsDataSet(data)
+            return data
 
         else:
             raise Exception('The "data" param is not a XPBoardsDataSet instance')
@@ -140,7 +143,7 @@ class XPBoardsServices:
 
             data = self.__handle_response(response.json())
 
-            return XPBoardsDataSet(data)
+            return data
 
         else:
             raise Exception('The "data" param is not a XPBoardsDataSet instance')
@@ -167,7 +170,7 @@ class XPBoardsServices:
 
             data = self.__handle_response(response.json())
 
-            return XPBoardsDataSet(data)
+            return data
 
         else:
             raise Exception('The "data" param is not a XPBoardsDataSet instance')
