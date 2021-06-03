@@ -25,9 +25,8 @@ xpb_services.list_datasets()
 
 ## Topics
 
-- [XPBoardsServices](#)
-- [XPBoardsDataSet](#)
-- [XPBoardsPlan](#)
-- [Examples](#)
+- [XPBoardsServices](services.md)
+- [XPBoardsDataSet](dataset.md)
+- [Examples](examples.md)
 
 <sub>© 2021 by LongView</sub>
